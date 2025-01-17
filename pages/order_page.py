@@ -12,10 +12,7 @@ class OrderPage:
     next_btn = [By.XPATH, './/button[text() = "Далее"]']
 
     delivery_data_input = [By.XPATH, './/input[@placeholder= "* Когда привезти самокат"]']
-    data_picker = [By.XPATH, './/div[@aria-label = "Choose понедельник, 13-е января 2025 г."]']
     rental_period_list = [By.CLASS_NAME, 'Dropdown-placeholder']
-    selected_rental_period = [By.XPATH, './/div[text()= "сутки"]']
-    scooter_color_checkbook = [By.XPATH, './/input[@id= "black"]']
     comment_input = [By.XPATH, './/input[@placeholder = "Комментарий для курьера"]']
     order_btn = [By.XPATH, '(.//button[text() = "Заказать"])[2]']
 
@@ -34,18 +31,18 @@ class OrderPage:
     def wait_for_load_order_page(self):
         WebDriverWait(self.driver, 3).until(EC.visibility_of_element_located(self.next_btn))
 
-    def order_scooter(self):
-        self.set_name('Людмила')
-        self.set_last_name('Гребенщикова')
-        self.set_address('ул. Пушкина, д. Колотушкина')
-        self.select_metro_station('Парк культуры')
-        self.set_phone_number('+385445647382')
+    def order_scooter(self, order_details):
+        self.set_name(order_details.name)
+        self.set_last_name(order_details.last_name)
+        self.set_address(order_details.address)
+        self.select_metro_station(order_details.station)
+        self.set_phone_number(order_details.phone_number)
         self.click_next_btn()
 
-        self.select_delivery_data()
-        self.select_rental_period()
-        self.click_scooter_color()
-        self.set_comment('Hello')
+        self.select_delivery_data(order_details.day)
+        self.select_rental_period(order_details.period)
+        self.click_scooter_color(order_details.color)
+        self.set_comment(order_details.comment)
         self.click_order_btn()
         self.click_yes_order_pop_up_btn()
         self.check_success_order_pop_up()
@@ -76,16 +73,33 @@ class OrderPage:
     def click_next_btn(self):
         WebDriverWait(self.driver, 3).until(EC.visibility_of_element_located(self.next_btn)).click()
 
-    def select_delivery_data(self):
+    @staticmethod
+    def delivery_data_locator(day):
+        if day < 10:
+            day = f"00{day}"
+        else:
+            day = f"0{day}"
+        return By.CLASS_NAME, f"react-datepicker__day--{day}"
+
+
+    def select_delivery_data(self, day):
         self.driver.find_element(*self.delivery_data_input).click()
-        WebDriverWait(self.driver, 3).until(EC.visibility_of_element_located(self.data_picker)).click()
+        WebDriverWait(self.driver, 3).until(EC.visibility_of_element_located(self.delivery_data_locator(day))).click()
 
-    def select_rental_period(self):
+    @staticmethod
+    def rental_period_locator(period):
+        return By.XPATH, f"//div[text() = '{period}']"
+
+    def select_rental_period(self,period):
         self.driver.find_element(*self.rental_period_list).click()
-        WebDriverWait(self.driver, 3).until(EC.visibility_of_element_located(self.selected_rental_period)).click()
+        WebDriverWait(self.driver, 3).until(EC.visibility_of_element_located(self.rental_period_locator(period))).click()
 
-    def click_scooter_color(self):
-        self.driver.find_element(*self.scooter_color_checkbook).click()
+    @staticmethod
+    def scooter_color_locator(color):
+        return By.XPATH, f"//input[@id = '{color}']"
+
+    def click_scooter_color(self, color):
+        self.driver.find_element(*self.scooter_color_locator(color)).click()
 
     def set_comment(self, comment):
         self.driver.find_element(*self.comment_input).send_keys(comment)

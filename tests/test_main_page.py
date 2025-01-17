@@ -1,5 +1,6 @@
 from selenium import webdriver
 from pages.main_page import HomePage
+from urls import Urls
 
 class TestDropdownListQuestions:
 
@@ -8,7 +9,7 @@ class TestDropdownListQuestions:
     @classmethod
     def setup_class(cls):
         cls.driver = webdriver.Firefox()
-        cls.driver.get('https://qa-scooter.praktikum-services.ru/')
+        cls.driver.get(Urls.MAIN_PAGE)
         cls.home_page = HomePage(cls.driver)
 
     def test_dropdown_question_payment_answer(self):
