@@ -37,3 +37,6 @@ class OrderDetails:
         self.period = period
         self.color = color
         self.comment = comment
+
+
+class Locators:
