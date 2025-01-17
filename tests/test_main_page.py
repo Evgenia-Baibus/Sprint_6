@@ -58,6 +58,7 @@ class TestDropdownListQuestions:
         self.home_page.click_delivery_area_btn()
         self.home_page.check_answer_delivery_area()
 
+
     @classmethod
     def teardown_class(cls):
         cls.driver.quit()

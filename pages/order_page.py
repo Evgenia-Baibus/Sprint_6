@@ -21,7 +21,10 @@ class OrderPage:
 
     yes_order_pop_up_btn = [By.XPATH, './/button[text() = "Да"]']
 
-    success_order_pop_up = [By.XPATH, './/div[text()= "Заказ оформлен"]']
+    view_status_btn = [By.XPATH, './/button[text()= "Посмотреть статус"]']
+
+    scooter_logo = [By.XPATH, './/img[@alt = "Scooter"]']
+    yandex_logo = [By.XPATH, './/img[@alt = "Yandex"]']
 
 
 
@@ -97,4 +100,16 @@ class OrderPage:
 
 
     def check_success_order_pop_up(self):
-        WebDriverWait(self.driver, 3).until(EC.visibility_of_element_located(self.success_order_pop_up))
+        WebDriverWait(self.driver, 3).until(EC.visibility_of_element_located(self.view_status_btn))
+
+    def click_view_status_btn(self):
+        WebDriverWait(self.driver, 3).until(EC.visibility_of_element_located(self.view_status_btn)).click()
+
+    def click_scooter_logo(self):
+        WebDriverWait(self.driver, 3).until(EC.visibility_of_element_located(self.scooter_logo)).click()
+
+    def click_yandex_logo(self):
+        WebDriverWait(self.driver, 3).until(EC.visibility_of_element_located(self.yandex_logo)).click()
+
+    def go_to_new_tab(self):
+        self.driver.switch_to.window(self.driver.window_handles[1])

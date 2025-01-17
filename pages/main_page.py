@@ -35,6 +35,7 @@ class HomePage:
     close_cookies_btn = [By.ID, 'rcc-confirm-button']
 
 
+
     def __init__(self, driver):
         self.driver = driver
 
@@ -119,7 +120,7 @@ class HomePage:
         self.driver.execute_script("arguments[0].scrollIntoView();", element)
 
     def click_bottom_order_btn(self):
-        self.driver.find_element(*self.bottom_order_btn).click()
+        WebDriverWait(self.driver, 3).until(expected_conditions.visibility_of_element_located(self.bottom_order_btn)).click()
 
     def click_close_cookies_btn(self):
         self.driver.find_element(*self.close_cookies_btn).click()
