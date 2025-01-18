@@ -10,7 +10,7 @@ class BasePage:
     def wait_for_element(self, locator):
         return WebDriverWait(self.driver, 3).until(expected_conditions.visibility_of_element_located(locator))
 
-    def click_button(self, locator):
+    def click_element(self, locator):
         self.wait_for_element(locator).click()
 
     def send_keys_to_input(self, locator, value):

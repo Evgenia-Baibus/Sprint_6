@@ -2,8 +2,10 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.wait import WebDriverWait
 
+from pages.base_page import BasePage
 
-class OrderPage:
+
+class OrderPage(BasePage):
     name_input = [By.XPATH, './/input[@placeholder = "* Имя"]']
     last_name_input = [By.XPATH, './/input[@placeholder = "* Фамилия"]']
     address_input =  [By.XPATH, './/input[@placeholder = "* Адрес: куда привезти заказ"]']
@@ -23,13 +25,8 @@ class OrderPage:
     scooter_logo = [By.XPATH, './/img[@alt = "Scooter"]']
     yandex_logo = [By.XPATH, './/img[@alt = "Yandex"]']
 
-
-
-    def __init__(self, driver):
-        self.driver = driver
-
     def wait_for_load_order_page(self):
-        WebDriverWait(self.driver, 3).until(EC.visibility_of_element_located(self.next_btn))
+        self.wait_for_element(self.next_btn)
 
     def order_scooter(self, order_details):
         self.set_name(order_details.name)
@@ -50,28 +47,28 @@ class OrderPage:
 
 
     def set_name(self, name):
-        self.driver.find_element(*self.name_input).send_keys(name)
+        self.send_keys_to_input(self.name_input, name)
 
     def set_last_name(self, last_name):
-        self.driver.find_element(*self.last_name_input).send_keys(last_name)
+       self.send_keys_to_input(self.last_name_input, last_name)
 
     def set_address(self, address):
-        self.driver.find_element(*self.address_input).send_keys(address)
+        self.send_keys_to_input(self.address_input, address)
 
     @staticmethod
     def metro_selection_locator(station):
         return By.XPATH, f"//div[text() = '{station}']"
 
     def select_metro_station(self, station):
-        self.driver.find_element(*self.metro_station_input).click()
-        self.driver.find_element(*self.metro_station_input).send_keys(station)
-        WebDriverWait(self.driver, 3).until(EC.visibility_of_element_located(self.metro_selection_locator(station))).click()
+        self.click_element(self.metro_station_input)
+        self.send_keys_to_input(self.metro_station_input, station)
+        self.click_element(self.metro_selection_locator(station))
 
     def set_phone_number(self, phone_number):
-        self.driver.find_element(*self.phone_input).send_keys(phone_number)
+        self.send_keys_to_input(self.phone_input, phone_number)
 
     def click_next_btn(self):
-        WebDriverWait(self.driver, 3).until(EC.visibility_of_element_located(self.next_btn)).click()
+        self.click_element(self.next_btn)
 
     @staticmethod
     def delivery_data_locator(day):
@@ -83,47 +80,44 @@ class OrderPage:
 
 
     def select_delivery_data(self, day):
-        self.driver.find_element(*self.delivery_data_input).click()
-        WebDriverWait(self.driver, 3).until(EC.visibility_of_element_located(self.delivery_data_locator(day))).click()
+        self.click_element(self.delivery_data_input)
+        self.click_element(self.delivery_data_locator(day))
 
     @staticmethod
     def rental_period_locator(period):
         return By.XPATH, f"//div[text() = '{period}']"
 
     def select_rental_period(self,period):
-        self.driver.find_element(*self.rental_period_list).click()
-        WebDriverWait(self.driver, 3).until(EC.visibility_of_element_located(self.rental_period_locator(period))).click()
+        self.click_element(self.rental_period_list)
+        self.click_element(self.rental_period_locator(period))
 
     @staticmethod
     def scooter_color_locator(color):
         return By.XPATH, f"//input[@id = '{color}']"
 
     def click_scooter_color(self, color):
-        self.driver.find_element(*self.scooter_color_locator(color)).click()
+        self.click_element(self.scooter_color_locator(color))
 
     def set_comment(self, comment):
-        self.driver.find_element(*self.comment_input).send_keys(comment)
+        self.send_keys_to_input(self.comment_input, comment)
 
     def click_order_btn(self):
-        button = WebDriverWait(self.driver, 3).until(EC.visibility_of_element_located(self.order_btn))
-        button.click()
-
+        self.click_element(self.order_btn)
 
     def click_yes_order_pop_up_btn(self):
-        WebDriverWait(self.driver, 3).until(EC.visibility_of_element_located(self.yes_order_pop_up_btn)).click()
-
+        self.click_element(self.yes_order_pop_up_btn)
 
     def check_success_order_pop_up(self):
-        WebDriverWait(self.driver, 3).until(EC.visibility_of_element_located(self.view_status_btn))
+        self.wait_for_element(self.view_status_btn)
 
     def click_view_status_btn(self):
-        WebDriverWait(self.driver, 3).until(EC.visibility_of_element_located(self.view_status_btn)).click()
+        self.click_element(self.view_status_btn)
 
     def click_scooter_logo(self):
-        WebDriverWait(self.driver, 3).until(EC.visibility_of_element_located(self.scooter_logo)).click()
+        self.click_element(self.scooter_logo)
 
     def click_yandex_logo(self):
-        WebDriverWait(self.driver, 3).until(EC.visibility_of_element_located(self.yandex_logo)).click()
+        self.click_element(self.yandex_logo)
 
     def go_to_new_tab(self):
         self.driver.switch_to.window(self.driver.window_handles[1])
