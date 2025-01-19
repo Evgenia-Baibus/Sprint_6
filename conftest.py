@@ -1,6 +1,5 @@
 import pytest
 from selenium import webdriver
-
 from urls import Urls
 
 
